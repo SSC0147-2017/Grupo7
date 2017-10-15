@@ -3,7 +3,7 @@
 public class DamageOnImpact : MonoBehaviour {
     public int Damage = 1;
     public bool DestroyOnImpact = true;
-    public GameObject ImpactEffect;
+    public GameObject DamageEffect;
 
     public GameObject ObjectIgnored;
 
@@ -20,19 +20,20 @@ public class DamageOnImpact : MonoBehaviour {
                 health.TakeDamage(Damage);
 
                 // Destroy
-                if (DestroyOnImpact) {
-                    if (ImpactEffect) {
-                        var impact = Instantiate(ImpactEffect, transform.position + transform.forward,
-                            Quaternion.Inverse(transform.rotation), other.transform);
-                        var parentScale = other.transform.lossyScale;
-                        var scale = Vector3.one;
-                        scale.x /= parentScale.x;
-                        scale.y /= parentScale.y;
-                        scale.x /= parentScale.z;
-                        impact.transform.localScale = scale;
-                    }
-                    Destroy(gameObject);
+                if (DamageEffect) {
+                    var impact = Instantiate(DamageEffect, transform.position + transform.forward,
+                        Quaternion.Inverse(transform.rotation), other.transform);
+                    var parentScale = other.transform.lossyScale;
+                    var scale = Vector3.one;
+                    scale.x /= parentScale.x;
+                    scale.y /= parentScale.y;
+                    scale.x /= parentScale.z;
+                    impact.transform.localScale = scale;
                 }
+            }
+
+            if (DestroyOnImpact) {
+                Destroy(gameObject);
             }
         }
     }
