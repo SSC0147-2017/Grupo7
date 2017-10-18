@@ -1,10 +1,16 @@
 fileFormatVersion: 2
 guid: 2a6c679da8a14224e88fac1541ac6bc8
-timeCreated: 1503783613
-licenseType: Free
+timeCreated: 1508157056
+licenseType: Pro
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Camera: {instanceID: 0}
+  - AttackerPrefab: {fileID: 1408759199508294, guid: ff2564029e62c1d448a7d46df9b487e3,
+      type: 2}
+  - DefenderPrefab: {fileID: 1408759199508294, guid: ff2564029e62c1d448a7d46df9b487e3,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

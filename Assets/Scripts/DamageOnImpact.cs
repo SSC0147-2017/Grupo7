@@ -7,7 +7,8 @@ public class DamageOnImpact : MonoBehaviour {
 
     public GameObject ObjectIgnored;
 
-    public void OnTriggerEnter(Collider other) {
+    public void OnCollisionEnter(Collision collision) {
+        var other = collision.collider;
         var obj = other.gameObject;
         if (obj == ObjectIgnored) {
             obj = null;

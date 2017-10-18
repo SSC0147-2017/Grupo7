@@ -12,9 +12,7 @@ public class Health : MonoBehaviour {
         HP = MaxHP;
     }
 
-    public bool IsAlive {
-        get { return HP == 0; }
-    }
+    public bool IsAlive => HP == 0;
 
     public void TakeDamage(int damage = 1) {
         HP = Mathf.Max(HP - damage, 0);

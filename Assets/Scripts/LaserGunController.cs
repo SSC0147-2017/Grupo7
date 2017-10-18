@@ -19,16 +19,18 @@ public class LaserGunController : MonoBehaviour {
     private AudioSource _audioSource;
     private PlayerInput _input;
     private CustomColor _color;
-    
+    private Level _level;
+
 
     public void Awake() {
         _audioSource = GetComponent<AudioSource>();
         _input = GetComponent<PlayerInput>();
         _color = GetComponent<CustomColor>();
+        _level = SpaceshipsUtils.FindLevel(gameObject);
     }
 
     public void Update() {
-        bool fire = _input.Player.GetButton("Fire");
+        bool fire = _input.Player.GetButtonDown("Fire");
         if (fire && _canFire) {
             StartCoroutine(FireBurst());
         }
@@ -42,10 +44,7 @@ public class LaserGunController : MonoBehaviour {
             var gun = Guns[gunIndex];
 
             if (gun) {
-                // Shoot, man
-                var shotInstance = Instantiate(Shot, gun.transform.position, gun.transform.rotation);
-//                shotInstance.GetComponent<ProjectileMovement>().Speed +=
-//                    Vector3.Dot(_body.velocity, _body.rotation * Vector3.forward);
+                var shotInstance = Instantiate(Shot, gun.transform.position, gun.transform.rotation, _level.transform);
                 shotInstance.GetComponent<DamageOnImpact>().ObjectIgnored = gameObject;
                 shotInstance.GetComponent<CustomColor>().Color = _color.Color;
 

@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour {
     public Color Color;
     public int ID = -1;
     public PlayerRole Role = PlayerRole.None;
 
-    public void Start() {
+    public void OnEnable() {
         // Find level
         Level level = SpaceshipsUtils.FindLevel(gameObject);
         if (!level) {
@@ -34,7 +33,7 @@ public class PlayerSpawner : MonoBehaviour {
         }
 
         // Spawn player
-        var player = Instantiate(prefab, transform.position, transform.rotation);
+        var player = Instantiate(prefab, transform.position, transform.rotation, level.transform);
         level.Players.Add(player);
         var follow = level.Camera.GetComponent<CameraFollow>();
         if (follow) {
