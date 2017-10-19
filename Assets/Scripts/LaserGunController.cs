@@ -5,9 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(PlayerInput))]
 public class LaserGunController : MonoBehaviour {
-    
-    public float TimeBetweenBursts = 0.3f;
     public int BurstSize = 3;
+    public float TimeBetweenBursts = 0.3f;
     public float TimeBetweenShots = 0.1f;
     public List<GameObject> Guns;
 
@@ -21,7 +20,6 @@ public class LaserGunController : MonoBehaviour {
     private CustomColor _color;
     private Level _level;
 
-
     public void Awake() {
         _audioSource = GetComponent<AudioSource>();
         _input = GetComponent<PlayerInput>();
@@ -30,7 +28,10 @@ public class LaserGunController : MonoBehaviour {
     }
 
     public void Update() {
-        bool fire = _input.Player.GetButtonDown("Fire");
+        bool fire = false;
+        if (_input.Player != null) {
+            fire = _input.Player.GetButtonDown("Fire");
+        }
         if (fire && _canFire) {
             StartCoroutine(FireBurst());
         }
@@ -40,7 +41,7 @@ public class LaserGunController : MonoBehaviour {
         _canFire = false;
         for (int i = 0; i < BurstSize; i++) {
             // Choose a gun
-            var gunIndex = i % Guns.Count;
+            int gunIndex = i % Guns.Count;
             var gun = Guns[gunIndex];
 
             if (gun) {

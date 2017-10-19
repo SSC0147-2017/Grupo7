@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "MovementSettings", menuName = "Spaceships/Physics Movement Settings", order = 1)]
+[CreateAssetMenu(fileName = "MovementSettings", menuName = "Spaceships/Physics Movement Settings")]
 public class PhysicsMovementSettings : ScriptableObject {
     public float Acceleration = 70f;
     public float AngularSpeed = 360f;

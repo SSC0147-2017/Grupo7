@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class SpaceshipsUtils {
     public static bool IsPlayer(GameObject obj) {
@@ -8,7 +9,7 @@ public class SpaceshipsUtils {
     public static Level FindLevel(GameObject obj) {
         var level = obj.GetComponentInParent<Level>();
         if (!level) {
-            Debug.Log("FindLevel returned null", obj);
+            throw new NullReferenceException("Can't find level");
         }
         return level;
     }
@@ -18,4 +19,11 @@ public enum PlayerRole {
     None,
     Attacker,
     Defender
+}
+
+public enum Direction {
+    None,
+    Forward,
+    Right,
+    Up
 }

@@ -22,7 +22,7 @@ public class PlayerInput : MonoBehaviour {
                 return null;
             }
 
-            if (_playerIsDirty) {
+            if (_playerIsDirty && ReInput.isReady) {
                 PlayerID = _playerID;
                 _playerIsDirty = (_player == null);
             }

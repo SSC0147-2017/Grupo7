@@ -30,6 +30,11 @@ public class DamageOnImpact : MonoBehaviour {
                     scale.y /= parentScale.y;
                     scale.x /= parentScale.z;
                     impact.transform.localScale = scale;
+
+                    var shake = impact.GetComponent<Shake>();
+                    if (shake) {
+                        shake.AmplitudeModulation = transform.forward;
+                    }
                 }
             }
 
