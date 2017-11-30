@@ -1,9 +1,11 @@
 ### Spaceships ###
-#Assets/
-
-Assets/*
-!Assets/Scripts*
-!Assets/Scenes*
+/UnityPackageManager
+/packages
+3rd Party*
+Assets/Prefabs*
+#Assets/*
+#!Assets/Scripts*
+#!Assets/Scenes*
 # !Assets/Prefabs*
 
 ## Unity Collab ###

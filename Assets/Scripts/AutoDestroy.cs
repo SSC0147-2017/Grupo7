@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class AutoDestroy : MonoBehaviour {
-    public float SecondsAlive = 10.0f;
+namespace Spaceships {
+    public class AutoDestroy : MonoBehaviour {
+        public float SecondsAlive = 10.0f;
 
-    public void Start() {
-        Destroy(gameObject, SecondsAlive);
+        public void Start() {
+            Destroy(gameObject, SecondsAlive);
+        }
+
     }
 }

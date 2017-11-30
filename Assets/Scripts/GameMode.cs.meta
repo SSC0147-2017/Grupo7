@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fe8ebc51e9221d64ca2e647d8c58ced7
+timeCreated: 1508878288
+licenseType: Pro
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - MainCamera: {instanceID: 0}
+  - PlayerSelection: {fileID: 11400000, guid: 3de19585e425f4a409ee5944b256d819, type: 2}
+  executionOrder: -100
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

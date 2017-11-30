@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 
-public class RotateAround : MonoBehaviour {
+namespace Spaceships {
+    public class RotateAround : MonoBehaviour {
 
-    public Vector3 Axis = Vector3.forward;
+        public Vector3 Axis = Vector3.forward;
 
-    public float Velocity = 90;
+        public float Velocity = 90;
 
-    void Start () {
-        Axis.Normalize();
-	}
-	
-	void Update () {
-        transform.Rotate(Axis, Velocity * Time.deltaTime);
-	}
+        void Start() {
+            Axis.Normalize();
+        }
+
+        void Update() {
+            transform.Rotate(Axis, Velocity * Time.deltaTime);
+        }
+    }
 }
