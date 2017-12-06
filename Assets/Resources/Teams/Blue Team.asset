@@ -14,5 +14,5 @@ MonoBehaviour:
   Name: Blue
   Team: 1
   Side: 1
-  Color: {r: 0.10980392, g: 0.64705884, b: 0.72156864, a: 1}
+  Color: {r: 0.11764705, g: 0.8925341, b: 1, a: 1}
   Role: 0

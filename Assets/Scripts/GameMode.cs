@@ -2,34 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using Rewired;
 using Spaceships.Resources;
 using UnityEngine;
 using Spaceships.Util;
 
 namespace Spaceships {
+
     public class GameMode : SingletonComponent<GameMode> {
 
-        // @TODO OMG WE'RE DOING THIS THE DUMBEST WAY
-        public CinemachineTargetGroup TemporaryGroup;
-
+        // Levels
         public CinemachineVirtualCamera MainCamera;
+
         public Level[] LevelSequence;
         public int CurrentLevelIndex;
         public int NextLevelIndex = -1;
-
-        // Players
-        public List<PlayerController> PlayersAlive;
-
-        [HideInInspector] public List<PlayerController> PlayersDead;
-
-        public PlayerSelection PlayerSelection;
-
-        [Serializable]
-        public class TeamArray : ClassWithArray<TeamSettings> { }
-
-        [ArrayBackedByEnum(typeof(Team))] public TeamArray Teams;
-
-        public TeamSettings WinningTeam { get; private set; }
 
         public Level CurrentLevel {
             get { return LevelSequence[CurrentLevelIndex]; }
@@ -44,13 +31,36 @@ namespace Spaceships {
             }
         }
 
-        protected override void Awake() {
-            base.Awake();
+        // Players
+        public PlayersRuntimeSet AllPlayersModular;
 
+        public PlayersRuntimeSet DeadPlayersModular;
+        public PlayersRuntimeSet ActivePlayersModular;
+
+
+        public List<PlayerController> PlayersAlive;
+        public List<PlayerController> PlayersDead;
+        public PlayerSelection PlayerSelection;
+
+        // Magic
+        [Serializable]
+        public class TeamArray : ClassWithArray<TeamSettings> {
+
+        }
+
+        [ArrayBackedByEnum(typeof(Team))] public TeamArray Teams;
+
+        public TeamSettings WinningTeam { get; private set; }
+
+        override protected void Awake() {
+            base.Awake(); // needed (singleton)
             var levels = FindObjectsOfType<Level>();
+
             if (LevelSequence.Length == 0) {
                 Debug.LogError("The gamemode has no Level Sequence", gameObject);
+
                 if (levels.Length > 0) {
+                    // what the fuck?
                     LevelSequence = new Level[1];
                     LevelSequence[0] = levels[0];
                     CurrentLevelIndex = 0;
@@ -65,28 +75,28 @@ namespace Spaceships {
 #else
                 Debug.LogWarning("Starting game on non 0 level index is for debug only");
 #endif
-            } else {
-                // everybody is attacking on level 0
-                foreach (var team in Teams) {
-                    team.Role = Role.Attacker;
-                }
             }
 
-            // @TODO for active teams
+            // everybody attacks on level zero
+            foreach (var team in Teams) {
+                team.Role = Role.Attacker;
+            }
+
+            // spawn every active team possible
             foreach (var spawner in CurrentLevel.Spawners) {
                 spawner.Spawn();
             }
 
+            // deactivate all other levels
             for (int i = 0; i < levels.Length; i++) {
                 levels[i].gameObject.SetActive(false);
             }
-
             CurrentLevel.gameObject.SetActive(true);
         }
 
         void Update() {
             bool revive = false;
-            foreach (var player in PlayersAlive.Concat(PlayersDead)) {
+            foreach (var player in AllPlayersModular.Items) {
                 if (player.Control != null) {
                     if (player.Control.GetButtonDown("Start")) {
                         revive = true;
@@ -96,20 +106,19 @@ namespace Spaceships {
             }
 
             if (revive) {
-                // player stuff
-                foreach (var player in PlayersDead) {
-                    player.gameObject.DestroyTemporaries();
+                // Player stuff
+                foreach (var player in DeadPlayersModular.Items.ToList()) {
+                    //player.gameObject.DestroyTemporaries();  // this doesn't really do anything yet, right?
                     player.GetComponent<Health>().Revive();
                 }
-                PlayersAlive.AddRange(PlayersDead);
-                PlayersDead.Clear();
 
-                // level stuff
+                // Level stuff
                 foreach (var gate in CurrentLevel.Gates) {
                     if (gate != null) {
                         gate.Close();
                     }
                 }
+
                 if (NextLevel) {
                     foreach (var gate in NextLevel.Gates) {
                         if (gate != null) {
@@ -123,53 +132,42 @@ namespace Spaceships {
                 WinningTeam = null;
                 GameGUI.Instance.Hide();
             }
-
-            // @TODO I'M ASHAMED OF MYSELF
-            // I DON'T EVEN WANNA SAY WHAT'S WRONG HERE
-            Instance.TemporaryGroup.m_Targets = new CinemachineTargetGroup.Target[PlayersAlive.Count];
-            for (int i = 0; i < PlayersAlive.Count; i++) {
-                Instance.TemporaryGroup.m_Targets[i].target = PlayersAlive[i].transform;
-                Instance.TemporaryGroup.m_Targets[i].weight = PlayersAlive[i].TimeAliveClampedTemporaryAndUgly;
-                Instance.TemporaryGroup.m_Targets[i].radius = 4;
-            }
         }
 
-        public void PlayerDied(GameObject dead) {
-            var deadPlayer = dead.GetComponent<PlayerController>();
-            PlayersAlive.Remove(deadPlayer);
-            PlayersDead.Add(deadPlayer);
+        public void PlayerDied() {
+            var deadPlayer = DeadPlayersModular.Items[DeadPlayersModular.Items.Count - 1];
 
-            if (PlayersAlive.Count == 0) {
-                Debug.LogError("Draw not yet supporter");
+            if (ActivePlayersModular.Items.Count == 0) {
+                Debug.LogError("Everyone's dead!");
                 return;
             }
 
-            // check teams remaining
+            // Is there only one team?
             bool oneTeamRemaining = true;
-            var winningTeamValue = PlayersAlive[0].Settings.Team;
-            for (int i = 1; i < PlayersAlive.Count; i++) {
-                if (winningTeamValue != PlayersAlive[i].Settings.Team) {
+            var winningTeamValue = ActivePlayersModular.Items[0].Settings.Team;
+            for (int i = 1; i < ActivePlayersModular.Items.Count; i++) {
+                if (winningTeamValue != ActivePlayersModular.Items[i].Settings.Team) {
                     oneTeamRemaining = false;
                     break;
                 }
             }
 
-            // if more than one team, battle is still on
+            // If more than one team, battle is still on
             if (!oneTeamRemaining) {
                 return;
             }
 
             WinningTeam = Teams[winningTeamValue];
 
-            // if the attacker team won, we're moving forward in the sequence 
+            // If the attacker team won, we're moving forward in the sequence 
             bool forwardInSequence = WinningTeam.Role == Role.Attacker;
             NextLevelIndex = CurrentLevelIndex + (forwardInSequence ? +1 : -1);
 
-            // if there's a level to go, we get it
+            // If there's a level to go, we get it
             if (NextLevelIndex >= 0 && NextLevelIndex < LevelSequence.Length) {
                 Level nextLevel = NextLevel;
 
-                // open level gates
+                // Open level gates
                 var currentLevelGate = CurrentLevel.Gates[WinningTeam.Side.GetOpposite()];
                 var nextLevelGate = nextLevel.Gates[WinningTeam.Side];
                 currentLevelGate.OpenForLeaving();
@@ -187,7 +185,7 @@ namespace Spaceships {
                                                (currentLevelBounds.size.x * currentLevelBounds.transform.lossyScale.x +
                                                 nextLevelBounds.size.x * nextLevelBounds.transform.lossyScale.x);
 
-                // go on
+                // Procceed
                 GameGUI.Instance.Go(WinningTeam.Side.GetOpposite());
                 nextLevel.gameObject.SetActive(true);
             } else {
@@ -197,15 +195,15 @@ namespace Spaceships {
         }
 
         public bool EndLevelTransition() {
-            var leavingLevel = CurrentLevel;
             var enteringLevel = NextLevel;
-            var leavingLevelIndex = CurrentLevelIndex;
+            var leavingLevel = CurrentLevel;
             var enteringLevelIndex = NextLevelIndex;
+            var leavingLevelIndex = CurrentLevelIndex;
             if (enteringLevel) {
-                foreach (var player in PlayersDead) {
+                // Kill old players
+                foreach (var player in DeadPlayersModular.Items.ToList()) {
                     Destroy(player.gameObject);
                 }
-                PlayersDead.Clear();
 
                 leavingLevel.gameObject.DestroyTemporaries();
                 leavingLevel.gameObject.SetActive(false);
@@ -247,5 +245,7 @@ namespace Spaceships {
 
             return result;
         }
+
     }
+
 }

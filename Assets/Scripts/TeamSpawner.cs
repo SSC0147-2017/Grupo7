@@ -5,10 +5,11 @@ using UnityEngine;
 using Spaceships.Util;
 
 namespace Spaceships {
+
     public class TeamSpawner : MonoBehaviour {
+
         public Team Team;
-        // public Transform[] SpawnPoints;
-        
+
         public void Spawn() {
             if (!gameObject.activeInHierarchy) {
                 return;
@@ -35,10 +36,10 @@ namespace Spaceships {
                     foreach (var color in colors) {
                         color.Team = Team;
                     }
-
-                    GameMode.Instance.PlayersAlive.Add(player);
                 }
             }
         }
+
     }
+
 }

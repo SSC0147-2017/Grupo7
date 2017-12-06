@@ -3,7 +3,9 @@ using Rewired;
 using UnityEngine;
 
 namespace Spaceships {
+
     public class PlayerController : MonoBehaviour {
+
         public PlayerSettings Settings;
 
         private Player _control;
@@ -19,7 +21,6 @@ namespace Spaceships {
             TimeAliveClampedTemporaryAndUgly = Mathf.Clamp01(TimeAliveClampedTemporaryAndUgly);
         }
 
-
         public Player Control {
             get {
                 if (!ReInput.isReady) {
@@ -33,5 +34,7 @@ namespace Spaceships {
                 return _control;
             }
         }
+
     }
+
 }

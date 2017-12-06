@@ -30,19 +30,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb84e30e02715445aeb9959894e3b4d, type: 3}
   m_Name: ColorGrading
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   gradingMode:
     overrideState: 1
-    value: 0
+    value: 1
   externalLut:
     overrideState: 0
     value: {fileID: 0}
   tonemapper:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -69,10 +69,10 @@ MonoBehaviour:
     value: {fileID: 0}
   temperature:
     overrideState: 0
-    value: 0
+    value: -39.4
   tint:
     overrideState: 0
-    value: 0
+    value: 38.6
   colorFilter:
     overrideState: 0
     value: {r: 1, g: 1, b: 1, a: 1}
@@ -86,10 +86,10 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   postExposure:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 0.6
   contrast:
-    overrideState: 0
+    overrideState: 1
     value: 0
   mixerRedOutRedIn:
     overrideState: 0
@@ -120,13 +120,13 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 0
-    value: {x: 1, y: 1, z: 1, w: 0}
+    value: {x: 0.98840433, y: 0.9151406, z: 1, w: -0.07027408}
   gamma:
-    overrideState: 0
-    value: {x: 1, y: 1, z: 1, w: 0}
+    overrideState: 1
+    value: {x: 0.94001245, y: 0.8377613, z: 1, w: -0.042164445}
   gain:
-    overrideState: 0
-    value: {x: 1, y: 1, z: 1, w: 0}
+    overrideState: 1
+    value: {x: 0.9149517, y: 0.7876946, z: 1, w: -0.35137028}
   masterCurve:
     overrideState: 0
     value:
@@ -147,7 +147,7 @@ MonoBehaviour:
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 4
+        m_RotationOrder: 0
       m_Loop: 0
       m_ZeroValue: 0
       m_Range: 1
@@ -299,14 +299,14 @@ MonoBehaviour:
     overrideState: 1
     value: 0.4
   smoothness:
-    overrideState: 0
-    value: 0.2
+    overrideState: 1
+    value: 0.4
   roundness:
     overrideState: 0
     value: 1
   rounded:
     overrideState: 0
-    value: 0
+    value: 1
   mask:
     overrideState: 0
     value: {fileID: 0}
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
   m_Name: Grain
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -357,10 +357,10 @@ MonoBehaviour:
     value: 0.5
   size:
     overrideState: 1
-    value: 0.7
+    value: 0.8
   lumContrib:
     overrideState: 0
-    value: 1
+    value: 0
 --- !u!114 &114617732691485452
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -378,16 +378,16 @@ MonoBehaviour:
     value: 1
   focusDistance:
     overrideState: 1
-    value: 0.1
+    value: 0.11
   aperture:
     overrideState: 1
     value: 32
   focalLength:
     overrideState: 1
-    value: 28
+    value: 27
   kernelSize:
     overrideState: 0
-    value: 1
+    value: 0
 --- !u!114 &114789754906497800
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1

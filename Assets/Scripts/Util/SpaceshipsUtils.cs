@@ -5,7 +5,9 @@ using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Spaceships.Util {
+
     public static class SpaceshipsUtils {
+
         public static bool IsPlayer(this GameObject obj) {
             return obj.CompareTag("Player");
         }
@@ -80,22 +82,30 @@ namespace Spaceships.Util {
         public static T RandomItem<T>(this IList<T> list) {
             return list[Random.Range(0, list.Count)];
         }
+
     }
 
     public enum Side {
+
         Left,
         Right,
         Up,
         Down
+
     }
 
     public enum Team {
+
         Red,
         Blue
+
     }
 
     public enum Role {
+
         Attacker,
         Defender
+
     }
+
 }
